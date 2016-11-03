@@ -52,14 +52,14 @@ AutoForm.addInputType("select2", {
     context.items = [];
 
     // Check if option is selected
-    var isSelected = function(conVal, optVal) {
+    var isSelected = function (conVal, optVal) {
       return _.isArray(conVal) ? _.contains(conVal, optVal) : optVal === conVal;
     };
 
     // Add all defined options
-    _.each(context.selectOptions, function(opt) {
+    _.each(context.selectOptions, function (opt) {
       if (opt.optgroup) {
-        var subItems = _.map(opt.options, function(subOpt) {
+        var subItems = _.map(opt.options, function (subOpt) {
           return {
             name: context.name,
             label: subOpt.label,
@@ -109,7 +109,9 @@ Template.afSelect2.events({
     // in the template autorun.
     // Fixes #18
     var val = template.$('select').val();
-    if (!_.isArray(val)) { val = [val]; }
+    if (!_.isArray(val)) {
+      val = [val];
+    }
     template.$('select option').each(function () {
       var $this = $(this);
       var selected = val.indexOf($this.attr('value')) !== -1;
@@ -160,7 +162,7 @@ Template.afSelect2.rendered = function () {
 
     var currentValues = $s.val();
     if ((!currentValues && values.length > 0) ||
-        (currentValues && currentValues.toString() !== values.toString())) {
+      (currentValues && currentValues.toString() !== values.toString())) {
       // select2 requires that we trigger change event
       // for it to realize it needs to update the select2 list.
       // We do it only if values have actually changed,
@@ -172,10 +174,11 @@ Template.afSelect2.rendered = function () {
 
 Template.afSelect2.destroyed = function () {
   try {
-    if (this.view && this.view._domrange) {
+    if (this.view && this.view._domrange && this.$('select').data('select2')) {
       this.$('select').select2('destroy');
     }
-  } catch (error) {}
+  } catch (error) {
+  }
 };
 
 /*
